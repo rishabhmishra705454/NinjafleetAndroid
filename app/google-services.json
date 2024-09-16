@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "488036562975",
+    "project_id": "ninjafleet-dab7e",
+    "storage_bucket": "ninjafleet-dab7e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:488036562975:android:cda3703ed02d619347bd2a",
+        "android_client_info": {
+          "package_name": "com.example.ninjafleet"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyABbq2GEyyq1-9djfzkQh-P4hc5YD81bUc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
