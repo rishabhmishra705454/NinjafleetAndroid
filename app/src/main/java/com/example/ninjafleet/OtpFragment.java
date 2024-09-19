@@ -1,18 +1,25 @@
 package com.example.ninjafleet;
 
+import android.media.metrics.BundleSession;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavOptions;
 import androidx.navigation.Navigation;
 
 import android.os.CountDownTimer;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.example.ninjafleet.Utils.LoadingDialog;
+import com.example.ninjafleet.Utils.SharedPrefManager;
+import com.example.ninjafleet.ViewModels.AuthViewModel;
 import com.example.ninjafleet.databinding.FragmentOtpBinding;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -31,20 +38,27 @@ public class OtpFragment extends Fragment {
     private FirebaseAuth mAuth;
     private String verificationId;
 
+    View view;
+    String phone;
+    AuthViewModel authViewModel ;
+    LoadingDialog loadingDialog;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding = FragmentOtpBinding.inflate(getLayoutInflater());
-        View view = binding.getRoot();
+         view = binding.getRoot();
 
         mAuth = FirebaseAuth.getInstance();
+        authViewModel = new ViewModelProvider(this).get(AuthViewModel.class);
 
         String phoneNumber = getArguments().getString("phoneNumber");
         binding.textPhoneNumber.setText("OTP is send on " + phoneNumber);
 
-        String phone = "+91" + phoneNumber;
+         phone = "+91" + phoneNumber;
         sendVerificationCode(phone);
+        loadingDialog = new LoadingDialog(getContext());
 
         binding.verifyOtpBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -56,7 +70,7 @@ public class OtpFragment extends Fragment {
                     Toast.makeText(getContext(), "Please enter valid OTP", Toast.LENGTH_SHORT).show();
                 }
                 else {
-
+                    loadingDialog.show();
                     verifyCode(binding.otpText.getEditText().getText().toString());
                     binding.countDownText.setVisibility(View.GONE);
 
@@ -112,6 +126,7 @@ public class OtpFragment extends Fragment {
                 // after setting this code
                 // to OTP edittext field we
                 // are calling our verifycode method.
+                loadingDialog.show();
                 verifyCode(code);
             }
 
@@ -149,11 +164,58 @@ public class OtpFragment extends Fragment {
                         if (task.isSuccessful()) {
                             Toast.makeText(getContext(), "Successfully Verified", Toast.LENGTH_SHORT).show();
 
-//                             Navigation.findNavController(view).navigate(R.id.action_otpFragment2_to_userDetailFragment2);
+
+                            authViewModel.loginUser(phone).observe(getViewLifecycleOwner(), loginModel -> {
+                                if (loginModel != null) {
+                                    if (loginModel.isSuccess()) {
+
+                                        loadingDialog.hide();
+
+                                        Log.e("error","yes");
+                                        // User is registered, proceed with the token
+                                        SharedPrefManager.getInstance(getContext()).saveUserData(
+                                                loginModel.getData().getToken(),
+                                                loginModel.getData().getUser().getId(),
+                                                loginModel.getData().getUser().getFarmerName(),
+                                                loginModel.getData().getUser().getMobileNo(),
+                                                loginModel.getData().getUser().getAadharNo(),
+                                                loginModel.getData().getUser().getAddress(),
+                                                String.valueOf(loginModel.getData().getUser().getTotalLand()),
+                                                loginModel.getData().getUser().getLandType()
+                                        );
+                                       // Toast.makeText(getContext(), "Login successful", Toast.LENGTH_SHORT).show();
+
+                                        NavOptions navOptions = new NavOptions.Builder()
+                                                .setPopUpTo(R.id.loginFragment, true)
+                                                .build();
+
+                                        Navigation.findNavController(view)
+                                                .navigate(R.id.homeFragment, null, navOptions);
+                                    } else {
+                                        loadingDialog.hide();
+                                        // User is not registered or login failed
+                                        Log.e("error","no");
+                                        Bundle bundle = new Bundle();
+                                        bundle.putString("phoneNo",phone);
+                                        NavOptions navOptions = new NavOptions.Builder()
+                                                .setPopUpTo(R.id.loginFragment, true)
+                                                .build();
+
+                                        Navigation.findNavController(view)
+                                                .navigate(R.id.updateProfileFragment2, bundle, navOptions);
+                                    }
+                                } else {
+                                    loadingDialog.hide();
+                                    Toast.makeText(getContext(), "Login failed. Please try again.", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+
+
 
 
                         } else {
-                            Toast.makeText(getContext(), "otp not verified", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), "Otp not verified", Toast.LENGTH_SHORT).show();
+                            loadingDialog.hide();
                         }
                     }
                 });

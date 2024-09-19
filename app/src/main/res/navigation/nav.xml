@@ -17,15 +17,33 @@
         android:id="@+id/otpFragment"
         android:name="com.example.ninjafleet.OtpFragment"
         android:label="fragment_otp"
-        tools:layout="@layout/fragment_otp" />
+        tools:layout="@layout/fragment_otp" >
+        <action
+            android:id="@+id/action_otpFragment_to_updateProfileFragment2"
+            app:destination="@id/updateProfileFragment2" />
+    </fragment>
     <fragment
         android:id="@+id/homeFragment"
         android:name="com.example.ninjafleet.HomeFragment"
         android:label="fragment_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_homeFragment_to_updateProfileFragment2"
+            app:destination="@id/updateProfileFragment2" />
+    </fragment>
     <fragment
         android:id="@+id/updateProfileFragment2"
         android:name="com.example.ninjafleet.UpdateProfileFragment"
         android:label="fragment_update_profile"
         tools:layout="@layout/fragment_update_profile" />
+    <fragment
+        android:id="@+id/bookingFragment"
+        android:name="com.example.ninjafleet.BookingFragment"
+        android:label="fragment_booking"
+        tools:layout="@layout/fragment_booking" />
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.example.ninjafleet.ProfileFragment"
+        android:label="fragment_profile"
+        tools:layout="@layout/fragment_profile" />
 </navigation>
