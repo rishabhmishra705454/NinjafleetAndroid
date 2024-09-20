@@ -55,6 +55,10 @@ public class MainActivity extends AppCompatActivity {
                     bottomNavigationView.setVisibility(View.GONE);
                 }else if (navDestination.getId() == R.id.updateProfileFragment2){
                     bottomNavigationView.setVisibility(View.GONE);
+                }else if (navDestination.getId() == R.id.locationPickFragment2){
+                    bottomNavigationView.setVisibility(View.GONE);
+                }else if (navDestination.getId() == R.id.permissionFragment){
+                    bottomNavigationView.setVisibility(View.GONE);
                 }
                 else {
                     bottomNavigationView.setVisibility(View.VISIBLE);

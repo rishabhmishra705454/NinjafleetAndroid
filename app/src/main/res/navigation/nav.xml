@@ -30,6 +30,12 @@
         <action
             android:id="@+id/action_homeFragment_to_updateProfileFragment2"
             app:destination="@id/updateProfileFragment2" />
+        <action
+            android:id="@+id/action_homeFragment_to_locationPickFragment2"
+            app:destination="@id/locationPickFragment2" />
+        <action
+            android:id="@+id/action_homeFragment_to_permissionFragment"
+            app:destination="@id/permissionFragment" />
     </fragment>
     <fragment
         android:id="@+id/updateProfileFragment2"
@@ -46,4 +52,22 @@
         android:name="com.example.ninjafleet.ProfileFragment"
         android:label="fragment_profile"
         tools:layout="@layout/fragment_profile" />
+    <fragment
+        android:id="@+id/locationPickFragment2"
+        android:name="com.example.ninjafleet.LocationPickFragment"
+        android:label="fragment_location_pick"
+        tools:layout="@layout/fragment_location_pick" >
+        <action
+            android:id="@+id/action_locationPickFragment2_to_homeFragment"
+            app:destination="@id/homeFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/permissionFragment"
+        android:name="com.example.ninjafleet.PermissionFragment"
+        android:label="fragment_permission"
+        tools:layout="@layout/fragment_permission" >
+        <action
+            android:id="@+id/action_permissionFragment_to_locationPickFragment2"
+            app:destination="@id/locationPickFragment2" />
+    </fragment>
 </navigation>

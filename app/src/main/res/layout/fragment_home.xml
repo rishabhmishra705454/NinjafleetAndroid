@@ -30,4 +30,67 @@
             android:layout_marginEnd="16dp"
             app:tint="@color/white" />
     </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:gravity="center_vertical"
+        android:background="@color/yellow">
+
+        <!-- Location Icon at Start -->
+        <ImageView
+            android:id="@+id/locationIc"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/location_pin"
+            android:layout_centerVertical="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="8dp" />
+
+        <!-- Change Button at End -->
+        <Button
+            android:id="@+id/changeBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:text="Change"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="8dp" />
+
+        <!-- Location Address in Between -->
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@id/locationIc"
+            android:layout_toStartOf="@id/changeBtn"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:ellipsize="end"
+            android:id="@+id/addressText"
+            android:singleLine="true"
+            android:maxLines="1"
+            />
+    </RelativeLayout>
+
+
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        app:cardCornerRadius="16dp"
+        android:layout_margin="16dp">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="150dp"/>
+    </androidx.cardview.widget.CardView>
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Services"
+        android:layout_marginStart="16dp"
+        android:textStyle="bold"/>
+
 </LinearLayout>
