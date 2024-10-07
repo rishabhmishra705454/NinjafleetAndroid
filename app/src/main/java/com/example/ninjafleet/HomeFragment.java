@@ -149,7 +149,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         binding.notiBtn.setOnClickListener(v -> Navigation.findNavController(v).navigate(R.id.action_homeFragment_to_notificationFragment));
 
         machineryViewModel.getMachinery(1, 100).observe(getViewLifecycleOwner(), machineryModel -> {
-            Toast.makeText(getContext(), machineryModel.getMessage(), Toast.LENGTH_SHORT).show();
+//            Toast.makeText(getContext(), machineryModel.getMessage(), Toast.LENGTH_SHORT).show();
 
             List<String> categories = new ArrayList<>();
             Map<String, List<MachineryModel.Machinery>> categorizedMachinery = new HashMap<>();

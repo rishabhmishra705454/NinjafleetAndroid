@@ -11,7 +11,6 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-
         android:textStyle="bold"
         android:gravity="center_horizontal"
         android:text="Enter OTP"
@@ -23,13 +22,14 @@
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
         android:padding="5dp"
-        android:text=""
+
         android:textSize="16sp" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:counterEnabled="true"
+        android:layout_marginTop="16dp"
         android:id="@+id/otpText"
         app:counterMaxLength="6"
         >
@@ -37,6 +37,7 @@
 
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:inputType="number"
             android:hint="Enter OTP"
             android:maxLength="6"/>
     </com.google.android.material.textfield.TextInputLayout>

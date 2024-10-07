@@ -74,7 +74,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="300dp">
+        android:layout_height="250dp">
 
 
 
@@ -84,7 +84,7 @@
             android:name="com.google.android.gms.maps.SupportMapFragment"
             android:layout_width="match_parent"
             map:uiZoomGestures="true"
-            android:layout_height="300dp" />
+            android:layout_height="250dp" />
         <ImageButton
             android:id="@+id/myLocationBtn"
             android:layout_width="wrap_content"
@@ -101,7 +101,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/top_round"
-        android:translationY="-10dp"
+
         android:orientation="vertical"
 
         >

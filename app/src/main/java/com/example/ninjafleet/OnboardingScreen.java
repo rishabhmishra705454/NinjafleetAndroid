@@ -105,19 +105,19 @@ public class OnboardingScreen extends AppCompatActivity {
         List<OnboardingModel> onBoardingItems = new ArrayList<>();
 
         OnboardingModel screen1 = new OnboardingModel();
-        screen1.setTitle("Choose your meal");
-        screen1.setDescription("You can easily choose your meal and take it!");
-        screen1.setImagge(R.drawable.logo_with_text);
+        screen1.setTitle("Welcome to Ninjafleet");
+        screen1.setDescription("Empowering Farmers with Easy Access to Modern Machinery");
+        screen1.setImagge(R.drawable.onboarding3);
 
         OnboardingModel screen2 = new OnboardingModel();
-        screen2.setTitle("Choose your meal");
-        screen2.setDescription("You can easily choose your meal and take it!");
-        screen2.setImagge(R.drawable.logo_with_text);
+        screen2.setTitle("Rent Machinery, Save Money");
+        screen2.setDescription("No need to own expensive equipment. Rent what you need, when you need it, and reduce farming costs with our flexible options.");
+        screen2.setImagge(R.drawable.onboarding2);
 
         OnboardingModel screen3 = new OnboardingModel();
-        screen3.setTitle("Choose your meal");
-        screen3.setDescription("You can easily choose your meal and take it!");
-        screen3.setImagge(R.drawable.logo_with_text);
+        screen3.setTitle("Real-Time Booking & Tracking");
+        screen3.setDescription("Keep track of your booked machinery and ensure timely arrivals with real-time location updates. Manage all your bookings easily from one place.");
+        screen3.setImagge(R.drawable.onboarding1);
 
 
 
