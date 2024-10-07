@@ -36,6 +36,9 @@
         <action
             android:id="@+id/action_homeFragment_to_permissionFragment"
             app:destination="@id/permissionFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_notificationFragment"
+            app:destination="@id/notificationFragment" />
     </fragment>
     <fragment
         android:id="@+id/updateProfileFragment2"
@@ -51,7 +54,11 @@
         android:id="@+id/profileFragment"
         android:name="com.example.ninjafleet.ProfileFragment"
         android:label="fragment_profile"
-        tools:layout="@layout/fragment_profile" />
+        tools:layout="@layout/fragment_profile" >
+        <action
+            android:id="@+id/action_profileFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
+    </fragment>
     <fragment
         android:id="@+id/locationPickFragment2"
         android:name="com.example.ninjafleet.LocationPickFragment"
@@ -70,4 +77,24 @@
             android:id="@+id/action_permissionFragment_to_locationPickFragment2"
             app:destination="@id/locationPickFragment2" />
     </fragment>
+    <fragment
+        android:id="@+id/notificationFragment"
+        android:name="com.example.ninjafleet.NotificationFragment"
+        android:label="fragment_notification"
+        tools:layout="@layout/fragment_notification" />
+    <fragment
+        android:id="@+id/machineryDetailsFragment"
+        android:name="com.example.ninjafleet.MachineryDetailsFragment"
+        android:label="fragment_machinery_details"
+        tools:layout="@layout/fragment_machinery_details" />
+    <fragment
+        android:id="@+id/bookNowFragment"
+        android:name="com.example.ninjafleet.BookNowFragment"
+        android:label="fragment_book_now"
+        tools:layout="@layout/fragment_book_now" />
+    <fragment
+        android:id="@+id/landMarkFragment"
+        android:name="com.example.ninjafleet.LandMarkFragment"
+        android:label="fragment_land_mark"
+        tools:layout="@layout/fragment_land_mark" />
 </navigation>

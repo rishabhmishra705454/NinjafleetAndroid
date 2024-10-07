@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -28,6 +29,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.example.ninjafleet.databinding.FragmentLandMarkBinding;
 import com.example.ninjafleet.databinding.FragmentLocationPickBinding;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -40,32 +42,45 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polygon;
+import com.google.android.gms.maps.model.PolygonOptions;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
-public class LocationPickFragment extends Fragment {
+public class LandMarkFragment extends Fragment {
+
 
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
     private GoogleMap map;
     private FusedLocationProviderClient mLocationClient;
-    private FragmentLocationPickBinding binding;
+    private FragmentLandMarkBinding binding;
     private Geocoder geocoder;
+    Polygon polygon = null;
+    List<LatLng> latLngList = new ArrayList<>();
+    List<Marker> markerList = new ArrayList<>();
 
     private OnMapReadyCallback callback = new OnMapReadyCallback() {
         @Override
         public void onMapReady(GoogleMap googleMap) {
             map = googleMap;
-            map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+            map.setMapType(GoogleMap.MAP_TYPE_HYBRID);
 
             map.setOnCameraIdleListener(() -> {
                 LatLng target = map.getCameraPosition().target;
@@ -81,14 +96,106 @@ public class LocationPickFragment extends Fragment {
                         String locality = addressList.get(0).getLocality();
                         String pincode = addressList.get(0).getPostalCode();
 
-                        binding.addressText.setText(address);
-                        binding.localtyText.setText(locality);
 
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             });
+
+
+            map.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+                @Override
+                public void onMapClick(@NonNull LatLng latLng) {
+                    MarkerOptions markerOptions = new MarkerOptions().position(latLng);
+                    Marker marker = map.addMarker(markerOptions);
+                    latLngList.add(latLng);
+                    markerList.add(marker);
+                }
+            });
+
+//            polygon.setFillColor(Color.argb(150, 0, 255, 0)); // Set the fill color (green with alpha)
+            binding.drawLand.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    if (markerList.size() < 4) {
+                        Toast.makeText(getContext(), "Please add four mark on your field boundary", Toast.LENGTH_SHORT).show();
+                    } else {
+                        // Remove the existing polygon if there is one
+                        if (polygon != null) {
+                            polygon.remove();
+                        }
+
+                        // Create a new PolygonOptions object with your latLngList
+                        PolygonOptions polygonOptions = new PolygonOptions()
+                                .addAll(latLngList)
+                                .clickable(true);
+
+                        // Add the polygon to the map, and now 'polygon' is not null anymore
+                        polygon = map.addPolygon(polygonOptions);
+
+                        binding.drawLand.setVisibility(View.GONE);
+                        binding.doneBtn.setVisibility(View.VISIBLE);
+                        // Set the fill and stroke colors on the newly created polygon
+                        if (polygon != null) {
+                            polygon.setFillColor(Color.argb(150, 0, 255, 0)); // Semi-transparent green fill
+                            polygon.setStrokeColor(Color.argb(255, 0, 128, 0)); // Solid green stroke
+
+                        }
+                    }
+
+                }
+            });
+
+            binding.doneBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // Create a JSONArray to hold all the marker data
+                    JSONArray markerArray = new JSONArray();
+
+                    try {
+                        for (Marker marker : markerList) {
+                            JSONObject markerData = new JSONObject();
+                            markerData.put("latitude", marker.getPosition().latitude);
+                            markerData.put("longitude", marker.getPosition().longitude);
+                            markerArray.put(markerData);
+                        }
+
+                        // Create a bundle to pass data
+                        Bundle result = new Bundle();
+                        result.putString("markerData", markerArray.toString());
+
+                        // Use FragmentManager to set the result and pass it to the previous fragment
+                        getParentFragmentManager().setFragmentResult("markerDataKey", result);
+
+                        // Optionally, navigate back to the previous fragment
+                        getParentFragmentManager().popBackStack();
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+
+            binding.clearBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (polygon != null) {
+                        polygon.remove();
+                    }
+
+                    for (Marker marker : markerList) {
+                        marker.remove();
+                    }
+                    latLngList.clear();
+                    markerList.clear();
+                    binding.drawLand.setVisibility(View.VISIBLE);
+                    binding.doneBtn.setVisibility(View.GONE);
+                }
+            });
+
+
         }
     };
 
@@ -97,7 +204,7 @@ public class LocationPickFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
 
-        binding = FragmentLocationPickBinding.inflate(getLayoutInflater());
+        binding = FragmentLandMarkBinding.inflate(getLayoutInflater());
 
         // Initialize Places API
         if (!Places.isInitialized()) {
@@ -122,12 +229,12 @@ public class LocationPickFragment extends Fragment {
         // Check and request permissions
         checkAndRequestPermissions();
 
-        binding.useLocationBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                saveLocationToSharedPreferences(); // Save location data when button is clicked
-            }
-        });
+//        binding.useLocationBtn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//              //  saveLocationToSharedPreferences(); // Save location data when button is clicked
+//            }
+//        });
         binding.backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -159,10 +266,10 @@ public class LocationPickFragment extends Fragment {
     }
 
     private void checkAndRequestPermissions() {
-        if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION)
+        if (ContextCompat.checkSelfPermission(requireContext(), android.Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(requireActivity(),
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
                     LOCATION_PERMISSION_REQUEST_CODE);
         } else {
             getCurrentLoc(); // Permissions already granted, proceed to get location
@@ -238,7 +345,9 @@ public class LocationPickFragment extends Fragment {
         CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 18);
         map.moveCamera(cameraUpdate);
         map.animateCamera(cameraUpdate);
-        map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+        map.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+        UiSettings mUiSettings = map.getUiSettings();
+        mUiSettings.setZoomControlsEnabled(true);
     }
 
     // Method to save location data to SharedPreferences
@@ -262,8 +371,8 @@ public class LocationPickFragment extends Fragment {
                 editor.putString("address", address);
                 editor.putString("locality", locality);
                 editor.putString("pincode", pincode);
-                editor.putString("latitude" ,String.valueOf(latitude));
-                editor.putString("longitude",String.valueOf(longitude));
+                editor.putString("latitude", String.valueOf(latitude));
+                editor.putString("longitude", String.valueOf(longitude));
                 editor.apply();
 
                 NavOptions navOptions = new NavOptions.Builder()
@@ -272,7 +381,7 @@ public class LocationPickFragment extends Fragment {
 
                 // Navigate to the HomeFragment and clear the backstack
                 Navigation.findNavController(getView()).navigate(R.id.action_locationPickFragment2_to_homeFragment, null, navOptions);
-              }
+            }
         } catch (IOException e) {
             e.printStackTrace();
             Toast.makeText(getContext(), "Failed to save location", Toast.LENGTH_SHORT).show();

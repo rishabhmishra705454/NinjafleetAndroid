@@ -61,6 +61,7 @@ dependencies {
     implementation ("com.squareup.retrofit2:converter-gson:2.11.0")
     implementation ("com.airbnb.android:lottie:3.4.0")
     implementation ("com.karumi:dexter:6.2.3")
+    implementation ("com.squareup.picasso:picasso:2.8")
 
 
 }

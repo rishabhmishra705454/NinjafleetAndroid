@@ -59,6 +59,12 @@ public class MainActivity extends AppCompatActivity {
                     bottomNavigationView.setVisibility(View.GONE);
                 }else if (navDestination.getId() == R.id.permissionFragment){
                     bottomNavigationView.setVisibility(View.GONE);
+                }else if (navDestination.getId()== R.id.machineryDetailsFragment){
+                    bottomNavigationView.setVisibility(View.GONE);
+                }else if (navDestination.getId()==R.id.bookNowFragment){
+                    bottomNavigationView.setVisibility(View.GONE);
+                }else if (navDestination.getId()==R.id.landMarkFragment){
+                    bottomNavigationView.setVisibility(View.GONE);
                 }
                 else {
                     bottomNavigationView.setVisibility(View.VISIBLE);
